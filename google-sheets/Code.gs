@@ -87,6 +87,16 @@ function testPost() {
   });
 }
 
+// Полная очистка таблицы и восстановление шапки.
+// Запустите ОДИН раз из редактора Apps Script (выберите эту функцию и нажмите «Запуск»),
+// если в таблице накопился мусор после ручного стирания ячеек.
+function resetSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
+  sheet.clear();
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+}
+
 function getOrCreateSheet() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_NAME);
