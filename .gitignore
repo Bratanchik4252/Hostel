@@ -1,0 +1,14 @@
+# Зависимости (не нужны для этого проекта, но на будущее)
+node_modules/
+
+# Локальные настройки Vercel
+.vercel/
+
+# Системные файлы
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Логи
+*.log
+npm-debug.log*
