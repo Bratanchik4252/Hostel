@@ -235,7 +235,7 @@ section { padding: 4.5rem 0; }
 .hero__bg {
   position: absolute;
   inset: 0;
-  background-image: url("https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1920&q=70");
+  background-image: url("../images/hero.jpg");
   background-size: cover;
   background-position: center;
 }
