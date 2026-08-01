@@ -1,9 +1,9 @@
 // ============================================================
 // Google Apps Script для приёма заявок с сайта в Google Таблицу
 //
-// ВАЖНО: после замены кода обязательно переразверните скрипт
-// («Развернуть» → «Управлять развертываниями» → карандаш ✎ →
-// «Версия: Новая версия» → «Развернуть»).
+// ВАЖНО: после замены кода обязательно переразверните скрипт:
+// «Развернуть» → «Управлять развертываниями» → карандаш ✎ →
+// «Версия: Новая версия» → «Развернуть».
 // ============================================================
 
 var SHEET_NAME = "Заявки";
@@ -24,7 +24,7 @@ function doPost(e) {
     var sheet = getOrCreateSheet();
     var d = JSON.parse(e.postData.contents);
 
-    sheet.appendRow([
+    var row = [
       formatDate(d.date),
       d.name || "",
       d.orgName || "",
@@ -33,7 +33,11 @@ function doPost(e) {
       d.dateIn || "",
       buildGuestsText(d),
       d.message || ""
-    ]);
+    ];
+
+    // Пишем ровно следующей строкой после последней заполненной
+    var nextRow = sheet.getLastRow() + 1;
+    sheet.getRange(nextRow, 1, 1, row.length).setValues([row]);
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
@@ -89,15 +93,14 @@ function getOrCreateSheet() {
 
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(HEADERS);
-    return sheet;
   }
 
-  // Миграция: если шапка старая — обновляем (старые строки с кривыми данными удаляются)
+  // Шапка всегда ровно в первой строке
   var firstRow = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
   if (firstRow.join("|") !== HEADERS.join("|")) {
     sheet.clear();
-    sheet.appendRow(HEADERS);
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
   }
+
   return sheet;
 }
