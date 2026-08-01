@@ -1,8 +1,9 @@
 // ============================================================
 // Google Apps Script для приёма заявок с сайта в Google Таблицу
 //
-// ВАЖНО: если лист «Заявки» уже существовал со старыми колонками,
-// скрипт при первом запуске заменит шапку на новую.
+// ВАЖНО: после замены кода обязательно переразверните скрипт
+// («Развернуть» → «Управлять развертываниями» → карандаш ✎ →
+// «Версия: Новая версия» → «Развернуть»).
 // ============================================================
 
 var SHEET_NAME = "Заявки";
@@ -24,7 +25,7 @@ function doPost(e) {
     var d = JSON.parse(e.postData.contents);
 
     sheet.appendRow([
-      d.date || new Date().toISOString(),
+      formatDate(d.date),
       d.name || "",
       d.orgName || "",
       d.phone || "",
@@ -44,6 +45,16 @@ function doPost(e) {
   }
 }
 
+// Приводит ISO-дату к читаемому виду: 2026-08-01 20:37
+function formatDate(iso) {
+  if (!iso) return "";
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  function p(n) { return (n < 10 ? "0" : "") + n; }
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) +
+    " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+
 function buildGuestsText(d) {
   var from = d.guestsFrom || "";
   var to = d.guestsTo || "";
@@ -58,13 +69,14 @@ function testPost() {
   doPost({
     postData: {
       contents: JSON.stringify({
-        date: new Date().toISOString(),
+        date: "2026-08-01T20:37:44.922Z",
         name: "Тест",
-        orgName: "",
+        orgName: "ООО «Тест»",
         phone: "+79990000000",
-        clientType: "individual",
+        clientType: "organization",
         dateIn: "2026-08-15",
-        guestsExact: "3",
+        guestsFrom: "10",
+        guestsTo: "15",
         message: "Проверка связи"
       })
     }
@@ -81,7 +93,7 @@ function getOrCreateSheet() {
     return sheet;
   }
 
-  // Миграция: если шапка старая — обновляем (старые тестовые строки удаляются)
+  // Миграция: если шапка старая — обновляем (старые строки с кривыми данными удаляются)
   var firstRow = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
   if (firstRow.join("|") !== HEADERS.join("|")) {
     sheet.clear();
