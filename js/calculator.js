@@ -8,7 +8,7 @@
 
   var currentType = window.clientType === "organization" ? "organization" : "individual";
 
-  var dateEl = document.getElementById("calcDate");
+  var dateEl = null;
   var guestsEl = document.getElementById("calcGuests");
   var nightsEl = document.getElementById("calcNights");
   var priceEl = document.getElementById("calcPrice");
