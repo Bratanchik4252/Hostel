@@ -1,29 +1,35 @@
 // ============================================================
 // Google Apps Script для приёма заявок с сайта в Google Таблицу
 //
-// КАК НАСТРОИТЬ (подробно: README.md в корне проекта):
-//  1. Откройте вашу Google Таблицу
-//  2. Расширения → Apps Script (Extensions → Apps Script)
-//  3. Вставьте весь код этого файла вместо содержимого
-//  4. Выберите функцию doPost (если выбрана не она) и нажмите «Развернуть»
-//     → «Новое развертывание» → тип «Веб-приложение»
-//  5. Выполнение: «От имени я», доступ: «Все, у кого есть ссылка»
-//  6. Скопируйте URL веб-приложения и вставьте его в js/config.js → sheetsUrl
+// ВАЖНО: если лист «Заявки» уже существовал со старыми колонками,
+// скрипт при первом запуске заменит шапку на новую.
 // ============================================================
 
 var SHEET_NAME = "Заявки";
 
+var HEADERS = [
+  "Дата и время",
+  "Имя",
+  "Название организации",
+  "Телефон",
+  "Тип клиента",
+  "Количество людей",
+  "Комментарий"
+];
+
 function doPost(e) {
   try {
     var sheet = getOrCreateSheet();
-    var data = JSON.parse(e.postData.contents);
+    var d = JSON.parse(e.postData.contents);
 
     sheet.appendRow([
-      data.date || new Date().toISOString(),
-      data.name || "",
-      data.phone || "",
-      data.clientType === "organization" ? "Организация" : "Частное лицо",
-      data.message || ""
+      d.date || new Date().toISOString(),
+      d.name || "",
+      d.orgName || "",
+      d.phone || "",
+      d.clientType === "organization" ? "Организация" : "Частное лицо",
+      buildGuestsText(d),
+      d.message || ""
     ]);
 
     return ContentService
@@ -36,15 +42,26 @@ function doPost(e) {
   }
 }
 
-// Небольшая проверка, что скрипт работает (кнопка «Запуск» в редакторе)
+function buildGuestsText(d) {
+  var from = d.guestsFrom || "";
+  var to = d.guestsTo || "";
+  if (from && to) return "от " + from + " до " + to;
+  if (from) return "от " + from;
+  if (to) return "до " + to;
+  return d.guestsExact || "";
+}
+
+// Проверка без сайта (кнопка «Запуск» в редакторе)
 function testPost() {
   doPost({
     postData: {
       contents: JSON.stringify({
         date: new Date().toISOString(),
         name: "Тест",
+        orgName: "",
         phone: "+79990000000",
         clientType: "individual",
+        guestsExact: "3",
         message: "Проверка связи"
       })
     }
@@ -54,9 +71,18 @@ function testPost() {
 function getOrCreateSheet() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_NAME);
+
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(["Дата и время", "Имя", "Телефон", "Тип клиента", "Комментарий"]);
+    sheet.appendRow(HEADERS);
+    return sheet;
+  }
+
+  // Миграция: если шапка старая — обновляем (старые тестовые строки удаляются)
+  var firstRow = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+  if (firstRow.join("|") !== HEADERS.join("|")) {
+    sheet.clear();
+    sheet.appendRow(HEADERS);
   }
   return sheet;
 }

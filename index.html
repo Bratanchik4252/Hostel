@@ -26,8 +26,8 @@
 
       <nav class="nav" id="nav" aria-label="Основное меню">
         <a href="#home" class="nav__link" data-scroll data-i18n="navHome">Главная</a>
-        <a href="#calculator" class="nav__link" data-scroll data-i18n="navCalc">Калькулятор</a>
         <a href="#gallery" class="nav__link" data-scroll data-i18n="navGallery">Галерея</a>
+        <a href="#calculator" class="nav__link" data-scroll data-i18n="navCalc">Калькулятор</a>
         <a href="#contact" class="nav__link" data-scroll data-i18n="navContact">Контакты</a>
       </nav>
 
@@ -120,6 +120,34 @@
       </div>
     </section>
 
+    <!-- ===== ГАЛЕРЕЯ ===== -->
+    <section class="gallery" id="gallery">
+      <div class="container">
+        <h2 class="section-title" data-i18n="galleryTitle">Галерея</h2>
+        <p class="section-subtitle" data-i18n="gallerySubtitle">Немного о том, как у нас уютно. Скоро добавим больше фото.</p>
+        <div class="gallery__grid">
+          <figure class="gallery__item">
+            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=900&q=60" alt="Общая спальня" loading="lazy" />
+          </figure>
+          <figure class="gallery__item">
+            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=60" alt="Номер" loading="lazy" />
+          </figure>
+          <figure class="gallery__item">
+            <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=900&q=60" alt="Койко-место" loading="lazy" />
+          </figure>
+          <figure class="gallery__item">
+            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=900&q=60" alt="Интерьер" loading="lazy" />
+          </figure>
+          <figure class="gallery__item">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=60" alt="Кухня" loading="lazy" />
+          </figure>
+          <figure class="gallery__item">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=900&q=60" alt="Зона отдыха" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== КАЛЬКУЛЯТОР ===== -->
     <section class="calculator" id="calculator">
       <div class="container">
@@ -166,34 +194,6 @@
             </div>
             <a href="#contact" class="btn btn--primary" data-scroll data-i18n="calcCta">Оставить заявку</a>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== ГАЛЕРЕЯ ===== -->
-    <section class="gallery" id="gallery">
-      <div class="container">
-        <h2 class="section-title" data-i18n="galleryTitle">Галерея</h2>
-        <p class="section-subtitle" data-i18n="gallerySubtitle">Немного о том, как у нас уютно. Скоро добавим больше фото.</p>
-        <div class="gallery__grid">
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=900&q=60" alt="Общая спальня" loading="lazy" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=60" alt="Номер" loading="lazy" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=900&q=60" alt="Койко-место" loading="lazy" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=900&q=60" alt="Интерьер" loading="lazy" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=60" alt="Кухня" loading="lazy" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=900&q=60" alt="Зона отдыха" loading="lazy" />
-          </figure>
         </div>
       </div>
     </section>
@@ -258,9 +258,31 @@
                 </label>
               </div>
             </div>
+            <label class="form__field" id="orgNameWrap" hidden>
+              <span data-i18n="formOrgName">Название организации</span>
+              <input class="input" type="text" name="orgName" id="fOrgName" autocomplete="organization" data-i18n-ph="formOrgNamePh" placeholder="ООО «Ромашка»" />
+            </label>
+            <div class="form__field">
+              <span data-i18n="formGuests">Количество людей</span>
+              <div class="form__radio">
+                <label class="radio">
+                  <input type="radio" name="guestsMode" value="exact" checked />
+                  <span data-i18n="formGuestsExact">Точное количество</span>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="guestsMode" value="range" />
+                  <span data-i18n="formGuestsRange">От ... до ...</span>
+                </label>
+              </div>
+              <input class="input" type="number" name="guestsExact" id="fGuestsExact" min="1" max="100" value="1" aria-label="Точное количество" />
+              <div class="guests-range" id="guestsRangeWrap" hidden>
+                <input class="input" type="number" name="guestsFrom" id="fGuestsFrom" min="1" max="100" data-i18n-ph="formGuestsFrom" placeholder="От" />
+                <input class="input" type="number" name="guestsTo" id="fGuestsTo" min="1" max="100" data-i18n-ph="formGuestsTo" placeholder="До" />
+              </div>
+            </div>
             <label class="form__field">
               <span data-i18n="formMessage">Комментарий</span>
-              <textarea class="input" name="message" id="fMessage" rows="3" data-i18n-ph="formMessagePh" placeholder="Даты, количество гостей, пожелания..."></textarea>
+              <textarea class="input" name="message" id="fMessage" rows="3" data-i18n-ph="formMessagePh" placeholder="Даты, пожелания..."></textarea>
             </label>
             <button class="btn btn--primary btn--block" type="submit" id="submitBtn" data-i18n="formSubmit">Отправить заявку</button>
             <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>

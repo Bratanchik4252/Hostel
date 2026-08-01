@@ -510,6 +510,12 @@ section { padding: 4.5rem 0; }
 
 .form__radio { display: flex; gap: 1.25rem; }
 
+.guests-range {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
 .radio { display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 500; cursor: pointer; }
 .radio input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
 
