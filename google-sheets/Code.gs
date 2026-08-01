@@ -13,6 +13,7 @@ var HEADERS = [
   "Название организации",
   "Телефон",
   "Тип клиента",
+  "Дата заезда",
   "Количество людей",
   "Комментарий"
 ];
@@ -28,6 +29,7 @@ function doPost(e) {
       d.orgName || "",
       d.phone || "",
       d.clientType === "organization" ? "Организация" : "Частное лицо",
+      d.dateIn || "",
       buildGuestsText(d),
       d.message || ""
     ]);
@@ -61,6 +63,7 @@ function testPost() {
         orgName: "",
         phone: "+79990000000",
         clientType: "individual",
+        dateIn: "2026-08-15",
         guestsExact: "3",
         message: "Проверка связи"
       })

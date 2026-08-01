@@ -10,13 +10,12 @@
 
   var fName = document.getElementById("fName");
   var fOrgName = document.getElementById("fOrgName");
-  var orgNameWrap = document.getElementById("orgNameWrap");
   var fPhone = document.getElementById("fPhone");
+  var fDateIn = document.getElementById("fDateIn");
   var fMessage = document.getElementById("fMessage");
   var fGuestsExact = document.getElementById("fGuestsExact");
   var fGuestsFrom = document.getElementById("fGuestsFrom");
   var fGuestsTo = document.getElementById("fGuestsTo");
-  var guestsRangeWrap = document.getElementById("guestsRangeWrap");
 
   if (!form || !statusEl) return;
 
@@ -36,47 +35,9 @@
     return digits.length >= 10 && digits.length <= 15;
   }
 
-  // ===== Показ/скрытие «Названия организации» =====
-  function onClientTypeChange() {
-    var checked = document.querySelector('input[name="clientTypeRadio"]:checked');
-    var isOrg = checked && checked.value === "organization";
-    if (orgNameWrap) orgNameWrap.hidden = !isOrg;
-    if (isOrg && fOrgName) fOrgName.setAttribute("required", "");
-    else if (fOrgName) fOrgName.removeAttribute("required");
-  }
-
-  document.querySelectorAll('input[name="clientTypeRadio"]').forEach(function (radio) {
-    radio.addEventListener("change", onClientTypeChange);
-  });
-
-  // ===== Переключение «точно» / «от ... до ...» =====
-  function onGuestsModeChange() {
-    var checked = document.querySelector('input[name="guestsMode"]:checked');
-    var isRange = checked && checked.value === "range";
-    if (fGuestsExact) fGuestsExact.hidden = isRange;
-    if (guestsRangeWrap) guestsRangeWrap.hidden = !isRange;
-  }
-
-  document.querySelectorAll('input[name="guestsMode"]').forEach(function (radio) {
-    radio.addEventListener("change", onGuestsModeChange);
-  });
-
-  function buildGuestsText() {
-    var mode = document.querySelector('input[name="guestsMode"]:checked');
-    if (mode && mode.value === "range") {
-      var from = (fGuestsFrom && fGuestsFrom.value.trim()) || "";
-      var to = (fGuestsTo && fGuestsTo.value.trim()) || "";
-      if (from && to) return "от " + from + " до " + to;
-      if (from) return "от " + from;
-      if (to) return "до " + to;
-      return "";
-    }
-    return (fGuestsExact && fGuestsExact.value.trim()) || "";
-  }
-
   function isValidGuests() {
-    var mode = document.querySelector('input[name="guestsMode"]:checked');
-    if (mode && mode.value === "range") {
+    var mode = window.guestsMode || "exact";
+    if (mode === "range") {
       var from = parseInt(fGuestsFrom.value, 10);
       var to = parseInt(fGuestsTo.value, 10);
       if (isNaN(from) && isNaN(to)) return false;
@@ -93,20 +54,17 @@
     e.preventDefault();
     setStatus(t("formSending"), "");
 
+    var type = window.clientType === "organization" ? "organization" : "individual";
+
     if (!isValidPhone(fPhone.value)) {
       setStatus(t("formPhoneError"), "error");
       fPhone.focus();
       return;
     }
 
-    var isOrg = (function () {
-      var checked = document.querySelector('input[name="clientTypeRadio"]:checked');
-      return checked && checked.value === "organization";
-    })();
-
-    if (isOrg && (!fOrgName || !fOrgName.value.trim())) {
+    if (type === "organization" && (!fOrgName || !fOrgName.value.trim())) {
       setStatus(t("formOrgNameError"), "error");
-      if (fOrgName) fOrgName.focus();
+      fOrgName.focus();
       return;
     }
 
@@ -124,12 +82,13 @@
     var payload = {
       date: new Date().toISOString(),
       name: fName ? fName.value.trim() : "",
-      orgName: isOrg && fOrgName ? fOrgName.value.trim() : "",
+      orgName: type === "organization" && fOrgName ? fOrgName.value.trim() : "",
       phone: fPhone.value.trim(),
-      clientType: isOrg ? "organization" : "individual",
-      guestsExact: (fGuestsExact ? fGuestsExact.value.trim() : "") || "",
-      guestsFrom: (fGuestsFrom ? fGuestsFrom.value.trim() : "") || "",
-      guestsTo: (fGuestsTo ? fGuestsTo.value.trim() : "") || "",
+      clientType: type,
+      dateIn: fDateIn ? fDateIn.value : "",
+      guestsExact: fGuestsExact ? fGuestsExact.value.trim() : "",
+      guestsFrom: fGuestsFrom ? fGuestsFrom.value.trim() : "",
+      guestsTo: fGuestsTo ? fGuestsTo.value.trim() : "",
       message: fMessage ? fMessage.value.trim() : ""
     };
 
@@ -148,8 +107,8 @@
       .then(function () {
         setStatus(t("formSuccess"), "success");
         form.reset();
-        onClientTypeChange();
-        onGuestsModeChange();
+        if (window.setClientType) window.setClientType("individual");
+        if (window.setGuestsMode) window.setGuestsMode("exact");
       })
       .catch(function () {
         setStatus(t("formError"), "error");
@@ -158,7 +117,4 @@
         submitBtn.disabled = false;
       });
   });
-
-  onClientTypeChange();
-  onGuestsModeChange();
 })();

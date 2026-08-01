@@ -77,11 +77,11 @@
         <span data-i18n="heroAddress">г. Владимир, Ноябрьская ул., 134</span>
       </div>
       <div class="hero__buttons">
-        <a href="#calculator" class="btn btn--primary btn--lg" data-scroll data-calc-type="individual">
+        <a href="#audience" class="btn btn--primary btn--lg" data-scroll data-audience="individual">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           <span data-i18n="heroBtnPrivate">Частным лицам</span>
         </a>
-        <a href="#calculator" class="btn btn--ghost btn--lg" data-scroll data-calc-type="organization">
+        <a href="#audience" class="btn btn--ghost btn--lg" data-scroll data-audience="organization">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
           <span data-i18n="heroBtnOrg">Организациям</span>
         </a>
@@ -123,6 +123,20 @@
             <h3 data-i18n="about4Title">Бесплатная парковка</h3>
             <p data-i18n="about4Text">Обширная зона бесплатной парковки для размещения транспортных средств постояльцев.</p>
           </div>
+          <div class="about__card">
+            <div class="about__icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <h3 data-i18n="about5Title">Круглосуточное заселение</h3>
+            <p data-i18n="about5Text">Заселение в любое время суток — приезжайте, когда удобно, администратор всегда на связи.</p>
+          </div>
+          <div class="about__card">
+            <div class="about__icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            </div>
+            <h3 data-i18n="about6Title">Безопасность</h3>
+            <p data-i18n="about6Text">Безопасность проживающих обеспечивается видеонаблюдением общих зон хостела.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -155,6 +169,29 @@
       </div>
     </section>
 
+    <!-- ===== ЧАСТНЫМ ЛИЦАМ / ОРГАНИЗАЦИЯМ ===== -->
+    <section class="audience" id="audience">
+      <div class="container">
+        <h2 class="section-title" data-i18n="audienceTitle">Частным лицам и организациям</h2>
+        <p class="section-subtitle" data-i18n="audienceSubtitle">Условия размещения для частных лиц и организаций.</p>
+
+        <div class="slider audience__slider" id="audSlider" data-slider-count="2">
+          <span class="slider__indicator" aria-hidden="true"></span>
+          <button type="button" class="slider__option is-active" data-slider-value="individual" data-i18n="heroBtnPrivate">Частным лицам</button>
+          <button type="button" class="slider__option" data-slider-value="organization" data-i18n="heroBtnOrg">Организациям</button>
+        </div>
+
+        <div class="audience__panel" id="audPrivate">
+          <div class="audience__body" data-i18n-html="audPrivate"></div>
+          <a href="#contact" class="btn btn--primary" data-scroll data-i18n="audCta">Оставить заявку</a>
+        </div>
+        <div class="audience__panel" id="audOrg" hidden>
+          <div class="audience__body" data-i18n-html="audOrg"></div>
+          <a href="#contact" class="btn btn--primary" data-scroll data-i18n="audCta">Оставить заявку</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== КАЛЬКУЛЯТОР ===== -->
     <section class="calculator" id="calculator">
       <div class="container">
@@ -162,29 +199,16 @@
         <p class="section-subtitle" data-i18n="calcSubtitle">Рассчитайте примерную стоимость проживания за пару кликов.</p>
 
         <div class="calc" id="calc">
-          <!-- Блюр-заглушка -->
-          <div class="calc__blur" aria-hidden="false">
-            <div class="calc__notice">
-              <div class="calc__notice-icon">
-                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
-              </div>
-              <h3 data-i18n="calcNoticeTitle">Цены уточняются</h3>
-              <p data-i18n="calcNoticeText">Стоимость будет доступна после согласования тарифов. Пока вы можете оставить заявку, и менеджер свяжется с вами.</p>
-            </div>
-          </div>
-
-          <div class="calc__panel" aria-hidden="true" tabindex="-1">
-            <div class="calc__tabs">
-              <button class="calc__tab is-active" type="button" data-calc-tab="individual" data-i18n="calcTabPrivate">Частное лицо</button>
-              <button class="calc__tab" type="button" data-calc-tab="organization" data-i18n="calcTabOrg">Организация</button>
+          <div class="calc__panel">
+            <div class="slider calc__slider" id="calcSlider" data-slider-count="2">
+              <span class="slider__indicator" aria-hidden="true"></span>
+              <button type="button" class="slider__option is-active" data-slider-value="individual" data-i18n="calcTabPrivate">Частное лицо</button>
+              <button type="button" class="slider__option" data-slider-value="organization" data-i18n="calcTabOrg">Организация</button>
             </div>
             <div class="calc__row">
               <label class="calc__field">
-                <span data-i18n="calcRoom">Тип размещения</span>
-                <select class="input" id="calcRoom">
-                  <option value="bunk" data-i18n="calcRoomBunk">Койко-место</option>
-                  <option value="private" data-i18n="calcRoomPrivate">Отдельная комната</option>
-                </select>
+                <span data-i18n="calcDate">Дата заезда</span>
+                <input class="input" id="calcDate" type="date" />
               </label>
               <label class="calc__field">
                 <span data-i18n="calcGuests">Количество гостей</span>
@@ -196,8 +220,11 @@
               </label>
             </div>
             <div class="calc__result">
-              <span data-i18n="calcResultLabel">Предварительная стоимость</span>
-              <strong id="calcPrice">— ₽</strong>
+              <div class="calc__rate">
+                <span id="calcRateLine">500 ₽ / сутки</span>
+                <small id="calcVatNote"></small>
+              </div>
+              <strong id="calcPrice">500 ₽</strong>
             </div>
             <a href="#contact" class="btn btn--primary" data-scroll data-i18n="calcCta">Оставить заявку</a>
           </div>
@@ -213,14 +240,8 @@
 
         <div class="contact__grid">
           <div class="contact__info">
-            <div class="contact__card">
-              <div class="contact__icon">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              </div>
-              <div>
-                <strong data-i18n="contactAddr">Адрес</strong>
-                <p data-i18n="contactAddrValue">г. Владимир, Ноябрьская ул., 134</p>
-              </div>
+            <div class="contact__map">
+              <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80%2C%20%D0%9D%D0%BE%D1%8F%D0%B1%D1%80%D1%8C%D1%81%D0%BA%D0%B0%D1%8F%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%2C%20134&z=16" width="100%" height="260" style="border:0" allowfullscreen loading="lazy" title="Центр размещения — Ноябрьская ул., 134, Владимир"></iframe>
             </div>
             <div class="contact__card">
               <div class="contact__icon">
@@ -248,38 +269,32 @@
               <span data-i18n="formName">Ваше имя</span>
               <input class="input" type="text" name="name" id="fName" autocomplete="name" data-i18n-ph="formNamePh" placeholder="Иван" />
             </label>
-            <label class="form__field">
-              <span data-i18n-html="formPhone">Телефон <em>*</em></span>
-              <input class="input" type="tel" name="phone" id="fPhone" required autocomplete="tel" inputmode="tel" data-i18n-ph="formPhonePh" placeholder="+7 (900) 000-00-00" />
-            </label>
-            <div class="form__field">
-              <span data-i18n="formClient">Кто вы?</span>
-              <div class="form__radio">
-                <label class="radio">
-                  <input type="radio" name="clientTypeRadio" value="individual" checked />
-                  <span data-i18n="formClientPrivate">Частное лицо</span>
-                </label>
-                <label class="radio">
-                  <input type="radio" name="clientTypeRadio" value="organization" />
-                  <span data-i18n="formClientOrg">Организация</span>
-                </label>
-              </div>
-            </div>
             <label class="form__field" id="orgNameWrap" hidden>
               <span data-i18n="formOrgName">Название организации</span>
               <input class="input" type="text" name="orgName" id="fOrgName" autocomplete="organization" data-i18n-ph="formOrgNamePh" placeholder="ООО «Ромашка»" />
             </label>
+            <label class="form__field">
+              <span data-i18n-html="formPhone">Телефон <em>*</em></span>
+              <input class="input" type="tel" name="phone" id="fPhone" required autocomplete="tel" inputmode="tel" data-i18n-ph="formPhonePh" placeholder="+7 (900) 000-00-00" />
+            </label>
+            <label class="form__field">
+              <span data-i18n="formDate">Дата заезда</span>
+              <input class="input" type="date" name="dateIn" id="fDateIn" />
+            </label>
+            <div class="form__field">
+              <span data-i18n="formClient">Кто вы?</span>
+              <div class="slider" id="clientSlider" data-slider-count="2">
+                <span class="slider__indicator" aria-hidden="true"></span>
+                <button type="button" class="slider__option is-active" data-slider-value="individual" data-i18n="formClientPrivate">Частное лицо</button>
+                <button type="button" class="slider__option" data-slider-value="organization" data-i18n="formClientOrg">Организация</button>
+              </div>
+            </div>
             <div class="form__field">
               <span data-i18n="formGuests">Количество людей</span>
-              <div class="form__radio">
-                <label class="radio">
-                  <input type="radio" name="guestsMode" value="exact" checked />
-                  <span data-i18n="formGuestsExact">Точное количество</span>
-                </label>
-                <label class="radio">
-                  <input type="radio" name="guestsMode" value="range" />
-                  <span data-i18n="formGuestsRange">От ... до ...</span>
-                </label>
+              <div class="slider" id="guestsSlider" data-slider-count="2">
+                <span class="slider__indicator" aria-hidden="true"></span>
+                <button type="button" class="slider__option is-active" data-slider-value="exact" data-i18n="formGuestsExact">Точное количество</button>
+                <button type="button" class="slider__option" data-slider-value="range" data-i18n="formGuestsRange">От ... до ...</button>
               </div>
               <input class="input" type="number" name="guestsExact" id="fGuestsExact" min="1" max="100" value="1" aria-label="Точное количество" />
               <div class="guests-range" id="guestsRangeWrap" hidden>

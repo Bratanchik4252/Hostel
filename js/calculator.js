@@ -1,78 +1,58 @@
 (function () {
   "use strict";
 
-  var CONFIG = window.SITE_CONFIG || {};
+  // Койко-место: 500 ₽/сутки для частных лиц, 400 ₽/сутки для организаций.
+  // Для организаций добавляется НДС 5%.
+  var RATES = { bunk: { individual: 500, organization: 400 } };
+  var VAT = 0.05;
 
-  // Тарифы будут добавлены после согласования цен с владельцами хостела.
-  // Формат: { bunk: { individual: 0, organization: 0 }, private: { individual: 0, organization: 0 } }
-  var RATES = CONFIG.calcRates || {};
+  var currentType = window.clientType === "organization" ? "organization" : "individual";
 
-  var tabs = document.querySelectorAll(".calc__tab");
-  var roomEl = document.getElementById("calcRoom");
+  var dateEl = document.getElementById("calcDate");
   var guestsEl = document.getElementById("calcGuests");
   var nightsEl = document.getElementById("calcNights");
   var priceEl = document.getElementById("calcPrice");
-  var clientTypeInput = document.getElementById("clientType");
+  var rateLineEl = document.getElementById("calcRateLine");
+  var vatNoteEl = document.getElementById("calcVatNote");
 
-  var currentType = "individual";
+  function t(key) {
+    var lang = document.documentElement.getAttribute("lang") || "ru";
+    var dict = (window.I18N || {})[lang] || {};
+    return dict[key] != null ? dict[key] : key;
+  }
 
-  function setType(type) {
-    currentType = type === "organization" ? "organization" : "individual";
-    tabs.forEach(function (tab) {
-      tab.classList.toggle("is-active", tab.getAttribute("data-calc-tab") === currentType);
-    });
-    if (clientTypeInput) clientTypeInput.value = currentType;
-    document.querySelectorAll('input[name="clientTypeRadio"]').forEach(function (radio) {
-      if (radio.value === currentType) radio.checked = true;
-    });
-    updatePrice();
+  function fmt(n) {
+    return n.toLocaleString("ru-RU");
   }
 
   function updatePrice() {
     if (!priceEl) return;
-    var room = roomEl ? roomEl.value : "bunk";
-    var guests = parseInt(guestsEl ? guestsEl.value : 1, 10) || 1;
-    var nights = parseInt(nightsEl ? nightsEl.value : 1, 10) || 1;
+    var guests = parseInt(guestsEl.value, 10) || 1;
+    var nights = parseInt(nightsEl.value, 10) || 1;
 
-    var rate = RATES[room] && RATES[room][currentType];
-    if (!rate) {
-      priceEl.textContent = "\u2014 \u20BD";
-      return;
+    var rate = RATES.bunk[currentType] || 0;
+    var base = rate * guests * nights;
+    var total = currentType === "organization" ? Math.round(base * (1 + VAT)) : base;
+
+    if (rateLineEl) rateLineEl.textContent = fmt(rate) + " \u20BD / \u0441\u0443\u0442\u043a\u0438";
+    if (vatNoteEl) {
+      var isOrg = currentType === "organization";
+      vatNoteEl.textContent = isOrg ? t("calcVatNote") : "";
+      vatNoteEl.style.display = isOrg ? "" : "none";
     }
-    var total = rate * guests * nights;
-    priceEl.textContent = total.toLocaleString("ru-RU") + " \u20BD";
+    priceEl.textContent = fmt(total) + " \u20BD";
   }
 
-  // Кнопки-переключатели калькулятора
-  tabs.forEach(function (tab) {
-    tab.addEventListener("click", function () {
-      setType(tab.getAttribute("data-calc-tab"));
-    });
-  });
-
-  // Кнопки «Частным лицам» / «Организациям» на главном экране
-  document.querySelectorAll("[data-calc-type]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      setType(btn.getAttribute("data-calc-type"));
-    });
-  });
-
-  // Переключение типа в форме синхронизирует калькулятор
-  document.querySelectorAll('input[name="clientTypeRadio"]').forEach(function (radio) {
-    radio.addEventListener("change", function () {
-      if (radio.checked) setType(radio.value);
-    });
-  });
-
-  [roomEl, guestsEl, nightsEl].forEach(function (el) {
+  [dateEl, guestsEl, nightsEl].forEach(function (el) {
     if (el) el.addEventListener("input", updatePrice);
   });
 
-  // ===== ПАМЯТКА: чтобы включить калькулятор =====
-  // 1. Заполните объект RATES выше реальными тарифами.
-  // 2. В index.html снимите блюр: замените класс у блока .calc__blur на скрытый
-  //    (например, добавьте style="display:none") и уберите aria-hidden у .calc__panel.
-  // 3. Табличка с текстом «Цены уточняются» исчезнет сама вместе с блюром.
+  window.calc = {
+    update: function (type) {
+      currentType = type === "organization" ? "organization" : "individual";
+      updatePrice();
+    }
+  };
 
-  setType("individual");
+  updatePrice();
 })();

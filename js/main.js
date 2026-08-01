@@ -61,6 +61,100 @@
     localStorage.setItem(LS_LANG, value);
   }
 
+  // ===== СЛАЙДЕР-ПЕРЕКЛЮЧАТЕЛЬ =====
+  function initSlider(el, onChange) {
+    if (!el) return null;
+    var indicator = el.querySelector(".slider__indicator");
+    var options = Array.prototype.slice.call(el.querySelectorAll(".slider__option"));
+    var count = options.length || 1;
+    el.style.setProperty("--slider-count", count);
+
+    function move(activeEl) {
+      var idx = options.indexOf(activeEl);
+      if (idx < 0) idx = 0;
+      options.forEach(function (o) { o.classList.toggle("is-active", o === activeEl); });
+      if (indicator) indicator.style.transform = "translateX(" + idx * 100 + "%)";
+    }
+
+    options.forEach(function (opt) {
+      opt.addEventListener("click", function () {
+        move(opt);
+        if (onChange) onChange(opt.getAttribute("data-slider-value"));
+      });
+    });
+
+    var init = el.querySelector(".slider__option.is-active") || options[0];
+    if (init) move(init);
+
+    return {
+      move: move,
+      get: function () {
+        var a = el.querySelector(".slider__option.is-active");
+        return a ? a.getAttribute("data-slider-value") : null;
+      }
+    };
+  }
+
+  // ===== СОСТОЯНИЕ ТИПА КЛИЕНТА =====
+  window.clientType = "individual";
+  window.guestsMode = "exact";
+
+  function setClientType(type) {
+    type = type === "organization" ? "organization" : "individual";
+    window.clientType = type;
+
+    var priv = document.getElementById("audPrivate");
+    var org = document.getElementById("audOrg");
+    if (priv) priv.hidden = type !== "individual";
+    if (org) org.hidden = type !== "organization";
+
+    var aud = window.audSlider;
+    if (aud) {
+      var a = document.querySelector('#audSlider .slider__option[data-slider-value="' + type + '"]');
+      if (a) aud.move(a);
+    }
+    var cs = window.calcSlider;
+    if (cs) {
+      var c = document.querySelector('#calcSlider .slider__option[data-slider-value="' + type + '"]');
+      if (c) cs.move(c);
+    }
+    var fs = window.clientSlider;
+    if (fs) {
+      var f = document.querySelector('#clientSlider .slider__option[data-slider-value="' + type + '"]');
+      if (f) fs.move(f);
+    }
+
+    var wrap = document.getElementById("orgNameWrap");
+    if (wrap) wrap.hidden = type !== "organization";
+
+    var h = document.getElementById("clientType");
+    if (h) h.value = type;
+
+    if (window.calc && window.calc.update) window.calc.update(type);
+  }
+  window.setClientType = setClientType;
+
+  function setGuestsMode(mode) {
+    window.guestsMode = mode === "range" ? "range" : "exact";
+    var exact = document.getElementById("fGuestsExact");
+    var wrap = document.getElementById("guestsRangeWrap");
+    if (exact) exact.hidden = mode === "range";
+    if (wrap) wrap.hidden = mode !== "range";
+  }
+  window.setGuestsMode = setGuestsMode;
+
+  window.audSlider = initSlider(document.getElementById("audSlider"), setClientType);
+  window.calcSlider = initSlider(document.getElementById("calcSlider"), setClientType);
+  window.clientSlider = initSlider(document.getElementById("clientSlider"), setClientType);
+  window.guestsSlider = initSlider(document.getElementById("guestsSlider"), setGuestsMode);
+
+  // Кнопки «Частным лицам» / «Организациям» (главный экран и секции)
+  document.querySelectorAll("[data-audience]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      setClientType(btn.getAttribute("data-audience"));
+    });
+  });
+
   // ===== ШАПКА: тень при прокрутке + подсветка пунктов =====
   var sections = document.querySelectorAll("section[id]");
   var navLinks = document.querySelectorAll(".nav__link");
@@ -154,4 +248,5 @@
   onScroll();
   applyTheme(theme);
   applyLang(lang);
+  setClientType("individual");
 })();
