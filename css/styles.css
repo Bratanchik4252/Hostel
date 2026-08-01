@@ -237,7 +237,7 @@ section { padding: 4.5rem 0; }
   inset: 0;
   background-image: url("../images/hero.jpg");
   background-size: cover;
-  background-position: 35% center;
+  background-position: 20% 30%;
 }
 
 .hero__overlay {
