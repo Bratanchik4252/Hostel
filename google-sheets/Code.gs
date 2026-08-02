@@ -8,6 +8,9 @@
 
 var SHEET_NAME = "Заявки";
 
+// Email, на который приходит полный текст заявки (и в почту, и в таблицу)
+var NOTIFY_EMAIL = "hostel_zakaz@mail.ru";
+
 var HEADERS = [
   "Дата и время",
   "Имя",
@@ -39,6 +42,9 @@ function doPost(e) {
     var nextRow = sheet.getLastRow() + 1;
     sheet.getRange(nextRow, 1, 1, row.length).setValues([row]);
 
+    // Полный текст заявки дублируем на почту
+    sendOrderEmail(d);
+
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
       .setMimeType(ContentService.MimeType.JSON);
@@ -47,6 +53,30 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// Отправляет на почту полный текст заявки
+function sendOrderEmail(d) {
+  if (!NOTIFY_EMAIL) return;
+  var clientType = d.clientType === "organization" ? "Организация" : "Частное лицо";
+  var body = [
+    "Новая заявка с сайта — Центр размещения (Хостел 33):",
+    "",
+    "Имя: " + (d.name || "—"),
+    "Телефон: " + (d.phone || "—"),
+    "Тип клиента: " + clientType,
+    "Название организации: " + (d.orgName || "—"),
+    "Дата заезда: " + (d.dateIn || "—"),
+    "Количество людей: " + buildGuestsText(d),
+    "Комментарий: " + (d.message || "—"),
+    "Дата и время отправки: " + formatDate(d.date)
+  ].join("\n");
+
+  MailApp.sendEmail({
+    to: NOTIFY_EMAIL,
+    subject: "Заявка с сайта: " + (d.name || "без имени") + ", тел. " + (d.phone || "—"),
+    body: body
+  });
 }
 
 // Приводит ISO-дату к читаемому виду: 2026-08-01 20:37
