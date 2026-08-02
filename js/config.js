@@ -8,7 +8,7 @@ window.SITE_CONFIG = {
   contactPhoneRaw: "+78000000000",
   contactEmail: "info@example.ru",
 
-  // Язык по умолчанию: "ru" | "en" | "uz"
+  // Язык по умолчанию: "ru" | "en" | "uz" | "tg"
   defaultLang: "ru",
 
   // Тема по умолчанию: "light" | "dark" | "auto"
