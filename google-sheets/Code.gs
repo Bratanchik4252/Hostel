@@ -9,7 +9,7 @@
 var SHEET_NAME = "Заявки";
 
 // Email, на который приходит полный текст заявки (и в почту, и в таблицу)
-var NOTIFY_EMAIL = "hostel_zakaz@mail.ru";
+var NOTIFY_EMAIL = "danielganbarov6@gmail.com";
 
 var HEADERS = [
   "Дата и время",
