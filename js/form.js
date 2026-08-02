@@ -104,14 +104,16 @@
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       })
-      .then(function () {
+      .then(function (data) {
+        if (data && data.ok === false) throw new Error(data.error || "server error");
         setStatus(t("formSuccess"), "success");
         form.reset();
         if (window.setClientType) window.setClientType("individual");
         if (window.setGuestsMode) window.setGuestsMode("exact");
       })
-      .catch(function () {
-        setStatus(t("formError"), "error");
+      .catch(function (err) {
+        var msg = err && err.message;
+        setStatus((msg && msg.indexOf("HTTP") !== 0) ? msg : t("formError"), "error");
       })
       .finally(function () {
         submitBtn.disabled = false;
