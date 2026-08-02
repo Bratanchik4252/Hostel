@@ -58,6 +58,7 @@ function doPost(e) {
 // Отправляет на почту полный текст заявки
 function sendOrderEmail(d) {
   if (!NOTIFY_EMAIL) return;
+  d = d || {};
   var clientType = d.clientType === "organization" ? "Организация" : "Частное лицо";
   var body = [
     "Новая заявка с сайта — Центр размещения (Хостел 33):",
