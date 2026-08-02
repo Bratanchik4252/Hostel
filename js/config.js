@@ -7,7 +7,7 @@ window.SITE_CONFIG = {
   // Контакты, которые показываются на сайте.
   contactPhone: "+7 4922 37-03-37",
   contactPhoneRaw: "+784922370337",
-  contactEmail: "danielganbarov6@gmail.com",
+  contactEmail: "hostel_zakaz@mail.ru",
 
   // Язык по умолчанию: "ru" | "en" | "uz" | "tg"
   defaultLang: "ru",
