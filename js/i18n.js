@@ -81,7 +81,7 @@ window.I18N = {
     formPhoneError: "Пожалуйста, укажите номер телефона.",
     formOrgNameError: "Пожалуйста, укажите название организации.",
     formGuestsError: "Пожалуйста, укажите количество людей.",
-    formConfigError: "Заявка не отправлена: добавьте URL Google Таблиц в файл js/config.js",
+    formConfigError: "Заявка не отправлена: добавьте ключ Web3Forms в файл js/config.js",
     footerPrivacy: "Политика конфиденциальности",
     privacyTitle: "Политика конфиденциальности",
     privacyBody:
@@ -178,7 +178,7 @@ window.I18N = {
     formPhoneError: "Please enter your phone number.",
     formOrgNameError: "Please enter the organization name.",
     formGuestsError: "Please specify the number of people.",
-    formConfigError: "Request not sent: add the Google Sheets URL in js/config.js",
+    formConfigError: "Request not sent: add your Web3Forms access key in js/config.js",
     footerPrivacy: "Privacy Policy",
     privacyTitle: "Privacy Policy",
     privacyBody:
@@ -275,7 +275,7 @@ window.I18N = {
     formPhoneError: "Iltimos, telefon raqamingizni kiriting.",
     formOrgNameError: "Iltimos, tashkilot nomini kiriting.",
     formGuestsError: "Iltimos, odamlar sonini ko'rsating.",
-    formConfigError: "Ariza yuborilmadi: js/config.js faylida Google Sheets URL manzilini qo'shing",
+    formConfigError: "Ariza yuborilmadi: js/config.js fayliga Web3Forms kalitini qo'shing",
     footerPrivacy: "Maxfiylik siyosati",
     privacyTitle: "Maxfiylik siyosati",
     privacyBody:
@@ -372,7 +372,7 @@ window.I18N = {
     formPhoneError: "Лутфан, рақами телефони худро нишон диҳед.",
     formOrgNameError: "Лутфан, номи ташкилотро нишон диҳед.",
     formGuestsError: "Лутфан, шумораи одамонро нишон диҳед.",
-    formConfigError: "Ариза фиристода нашуд: URL-и Google Таблицро дар файли js/config.js илова кунед",
+    formConfigError: "Ариза фиристода нашуд: калиди Web3Forms-ро дар файли js/config.js илова кунед",
     footerPrivacy: "Сиёсати махфият",
     privacyTitle: "Сиёсати махфият",
     privacyBody:

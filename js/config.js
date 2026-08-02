@@ -1,7 +1,8 @@
 // ===== НАСТРОЙКИ САЙТА =====
 window.SITE_CONFIG = {
-  // URL Web App из Google Apps Script.
-  sheetsUrl: "https://script.google.com/macros/s/AKfycbz1QmOhHFA5lK7Aw7YtU8mwuSV1o8k3qKENddavVf5EjI2W3l3xzLzw8VebP8tidhLpGA/exec",
+  // Ключ Web3Forms (https://web3forms.com): письмо + копия в Google Таблицу.
+  // Зарегистрируйтесь, создайте форму, вставьте сюда свой access key.
+  web3Key: "",
 
   // Контакты, которые показываются на сайте.
   contactPhone: "+7 4922 37-03-37",

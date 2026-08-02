@@ -73,39 +73,52 @@
       return;
     }
 
-    var url = CONFIG.sheetsUrl;
-    if (!url) {
+    var key = CONFIG.web3Key;
+    if (!key) {
       setStatus(t("formConfigError"), "error");
       return;
     }
 
+    var guests;
+    var mode = window.guestsMode || "exact";
+    if (mode === "range") {
+      var from = fGuestsFrom ? fGuestsFrom.value.trim() : "";
+      var to = fGuestsTo ? fGuestsTo.value.trim() : "";
+      guests = (from ? "от " + from : "") + (from && to ? " " : "") + (to ? "до " + to : "");
+    } else {
+      guests = fGuestsExact ? fGuestsExact.value.trim() : "";
+    }
+
+    var name = fName ? fName.value.trim() : "";
+
     var payload = {
-      date: new Date().toISOString(),
-      name: fName ? fName.value.trim() : "",
-      orgName: type === "organization" && fOrgName ? fOrgName.value.trim() : "",
+      access_key: key,
+      subject: "Заявка с сайта — Центр размещения (Хостел 33): " + (name || "без имени") + ", тел. " + fPhone.value.trim(),
+      from_name: "Центр размещения (Хостел 33)",
+      botcheck: "",
+      name: name,
       phone: fPhone.value.trim(),
       clientType: type,
+      orgName: type === "organization" && fOrgName ? fOrgName.value.trim() : "",
       dateIn: fDateIn ? fDateIn.value : "",
-      guestsExact: fGuestsExact ? fGuestsExact.value.trim() : "",
-      guestsFrom: fGuestsFrom ? fGuestsFrom.value.trim() : "",
-      guestsTo: fGuestsTo ? fGuestsTo.value.trim() : "",
+      guests: guests,
       message: fMessage ? fMessage.value.trim() : ""
     };
 
     submitBtn.disabled = true;
 
-    fetch(url, {
+    fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     })
       .then(function (res) {
-        if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       })
       .then(function (data) {
-        if (data && data.ok === false) throw new Error(data.error || "server error");
+        if (!data || data.success !== true) {
+          throw new Error((data && data.message) || "server error");
+        }
         setStatus(t("formSuccess"), "success");
         form.reset();
         if (window.setClientType) window.setClientType("individual");
